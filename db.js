@@ -1,9 +1,9 @@
 const mongoose=require('mongoose');
+require('dotenv').config()
 
-mongoose.connect('mongodb://127.0.0.1:27017/College',{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+const mongoURL=process.env.MONGO_URL;
+
+mongoose.connect(mongoURL);
 
 const db=mongoose.connection;
 

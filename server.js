@@ -3,7 +3,7 @@ const db=require('./db');
 const bodyParser=require('body-parser');
 const course=require('./models/course');
 const app=express();
-
+require('dotenv').config()
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -19,6 +19,7 @@ app.use('/students',routerStudent);
 const teacherRoutes=require('./routes/teacherRoutes');
 app.use('/',teacherRoutes);
 
-app.listen(3000,()=>{
+const PORT=process.env.PORT || 3000;
+app.listen(PORT,()=>{
     console.log("Server is live now");
 })
