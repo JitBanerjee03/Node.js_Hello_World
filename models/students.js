@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const { type } = require('os');
 const { float } = require('webidl-conversions');
+const bcrypt=require('bcrypt');
 
 const studentSchema=mongoose.Schema({  //defining the schema
     firstName:{
@@ -50,8 +51,43 @@ const studentSchema=mongoose.Schema({  //defining the schema
         unique:true,
         required:true
     },
+
+    userName:{
+        type:String,
+        required:true
+    },
+    
+    password:{
+        type:String,
+        required:true
+    }
 })
 
+studentSchema.pre('save',async function(next){
+    const student=this;
+    try{
+        if(!student.isModified('password')){
+            next();
+        }else{
+            const salt=await bcrypt.genSalt(10);
+            const hashedPassword=await bcrypt.hash(student.password,salt); 
+            student.password=hashedPassword;
+            next();
+        }
+    }catch(err){
+        next(err);
+    }
+})
+
+studentSchema.methods.studentSchema=async (userPassword)=>{
+    try{
+        const isTrue= await bcrypt.compare(userPassword,this.password);
+
+        return isTrue;
+    }catch(err){
+        throw err;
+    }
+}
 const studentModel=mongoose.model('student',studentSchema);  //creating the student model
 
 module.exports=studentModel;

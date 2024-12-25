@@ -4,12 +4,20 @@ const bodyParser=require('body-parser');
 const course=require('./models/course');
 const app=express();
 require('dotenv').config()
+const passport=require('./auth');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+app.use(passport.initialize());
+const localAuthentication=passport.authenticate('local',{session:false});
+
+app.get('/',localAuthentication,(req,res)=>{
+    res.send("Wellcome to the college");
+})
 
 //routing endpoints for student
 const routerStudent=require('./routes/studentRoutes');

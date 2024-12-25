@@ -41,6 +41,16 @@ const teacherSchema=mongoose.Schema({  //defining the schema
 
     coursesTought:{
         type:[Number],
+    },
+
+    userName:{
+        type:String,
+        required:true
+    },
+
+    password:{
+        type:String,
+        required:true
     }
 })
 
